@@ -8,32 +8,54 @@
     <style type="text/css">
         canvas {
             color: #465f25;
-            text-shadow: 0 1px #d9f3b5;
             background: #94d362;
             border-color: #91ce5e #7ab04b #5e903f;
-            background-image: -webkit-linear-gradient(top, #c0eb85 0%, #94d362 70%, #8ed258 100%);
-            background-image: -moz-linear-gradient(top, #c0eb85 0%, #94d362 70%, #8ed258 100%);
-            background-image: -o-linear-gradient(top, #c0eb85 0%, #94d362 70%, #8ed258 100%);
-            background-image: linear-gradient(to bottom, #c0eb85 0%, #94d362 70%, #8ed258 100%);
             -webkit-box-shadow: inset 0 1px #d9f3b5, inset 0 0 0 1px #b1e095, 0 1px #5e903f, 0 3px #6da445, 0 4px #5e903f, 0 5px 2px rgba(0, 0, 0, 0.4);
-            box-shadow: inset 0 1px #d9f3b5, inset 0 0 0 1px #b1e095, 0 1px #5e903f, 0 3px #6da445, 0 4px #5e903f, 0 5px 2px rgba(0, 0, 0, 0.4);
             border-radius: 10px;
         }
-     /*   body {
-
-            display: flex;
-            justify-content: center;
+        button {
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            text-align: center;
             align-items: center;
-            text-align:center;
-        }*/
-   
-        script {
+            align-content: center;
+            position: fixed;
+            top: auto;
+            left: auto;
+            transform: translate(40%,-50%);
             
         }
     </style>
+
+    <script>
+        function exportDataToExcel(dataID, filename = '') {
+            var downloadLink;
+            var datatype = 'application/vnd.ms-excel';
+            var dataSelect = document.getElementById(dataID);
+            var dataHTML = dataSelect.outerHTML.replace(/ /g, '%20');
+
+            filename = filename ? filename + '.xls' : 'excel_data.xls';
+            downloadLink = document.createElement("a");
+            document.body.appendChild(downloadLink);
+
+            if (navigator.msSaveOrOpenBlob) {
+                var blob = new Blob(['\ufeff', dataHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                downloadLink.href = 'data: ' + datatype + ', ' + dataHTML;
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
+        }
+    </script>
 </head>
 <body>
-    @*<p id="price"></p>*@<h3>Elektri jooksva tunni hind</h3>
+    <button onclick="exportDataToExcel('data');">Export data to Excel</button>
+    <br>
+
+    <h3>Elektri jooksva tunni hind</h3>
     <canvas id="data" width="250" height="75"></canvas>
     <div>
         <script>
@@ -49,10 +71,10 @@
                 var c = document.getElementById("data");
                 var ctx = c.getContext("2d");
                 ctx.font = "30px Arial";
-                
-                ctx.fillText(price + " €/MWh", 40, 50);
+
+                ctx.fillText(price + " €/MWh", 30, 50);
             }
         </script>
-     </div>
+    </div>
 </body>
-</html>
+</html >
